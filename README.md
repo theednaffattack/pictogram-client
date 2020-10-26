@@ -1,4 +1,5 @@
-# A NextJS starter app for use in my portfolio
+# Pictogram
+A sort of Instagram clone.
 
 ## Features
 
