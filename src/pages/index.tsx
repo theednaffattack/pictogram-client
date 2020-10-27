@@ -70,7 +70,12 @@ function Index() {
                       </Flex>
                       <Text>{text}</Text>
                     </Box>
-
+                    <NextLink href={`/post/${id}`} passHref>
+                      <Link>
+                      open: {id}
+                      </Link>
+                    </NextLink>
+                    
 
                     <LikesAndCommentsSummary
                       comments_count={comments_count}
