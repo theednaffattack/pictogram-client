@@ -773,6 +773,23 @@ export type RegisterMutation = { __typename?: "Mutation" } & {
   register: { __typename?: "UserResponse" } & TypicalUserResponseFragment;
 };
 
+export type GetGlobalPostByIdQueryVariables = Exact<{
+  getpostinput: GetGlobalPostByIdInput;
+}>;
+
+export type GetGlobalPostByIdQuery = { __typename?: "Query" } & {
+  getGlobalPostById?: Maybe<
+    { __typename?: "GlobalPostReturnType" } & Pick<
+      GlobalPostReturnType,
+      "id" | "title" | "text"
+    > & {
+        images?: Maybe<
+          Array<{ __typename?: "Image" } & Pick<Image, "id" | "uri">>
+        >;
+      }
+  >;
+};
+
 export type GetGlobalPostsRelayQueryVariables = Exact<{
   before?: Maybe<Scalars["String"]>;
   after?: Maybe<Scalars["String"]>;
@@ -1240,6 +1257,68 @@ export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<
   RegisterMutation,
   RegisterMutationVariables
+>;
+export const GetGlobalPostByIdDocument = gql`
+  query GetGlobalPostById($getpostinput: GetGlobalPostByIdInput!) {
+    getGlobalPostById(getpostinput: $getpostinput) {
+      id
+      title
+      text
+      images {
+        id
+        uri
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetGlobalPostByIdQuery__
+ *
+ * To run a query within a React component, call `useGetGlobalPostByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGlobalPostByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGlobalPostByIdQuery({
+ *   variables: {
+ *      getpostinput: // value for 'getpostinput'
+ *   },
+ * });
+ */
+export function useGetGlobalPostByIdQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetGlobalPostByIdQuery,
+    GetGlobalPostByIdQueryVariables
+  >
+) {
+  return Apollo.useQuery<
+    GetGlobalPostByIdQuery,
+    GetGlobalPostByIdQueryVariables
+  >(GetGlobalPostByIdDocument, baseOptions);
+}
+export function useGetGlobalPostByIdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetGlobalPostByIdQuery,
+    GetGlobalPostByIdQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<
+    GetGlobalPostByIdQuery,
+    GetGlobalPostByIdQueryVariables
+  >(GetGlobalPostByIdDocument, baseOptions);
+}
+export type GetGlobalPostByIdQueryHookResult = ReturnType<
+  typeof useGetGlobalPostByIdQuery
+>;
+export type GetGlobalPostByIdLazyQueryHookResult = ReturnType<
+  typeof useGetGlobalPostByIdLazyQuery
+>;
+export type GetGlobalPostByIdQueryResult = Apollo.QueryResult<
+  GetGlobalPostByIdQuery,
+  GetGlobalPostByIdQueryVariables
 >;
 export const GetGlobalPostsRelayDocument = gql`
   query GetGlobalPostsRelay(
