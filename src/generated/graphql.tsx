@@ -705,6 +705,30 @@ export type UserBaseFragment = { __typename?: "User" } & Pick<
   "id" | "username"
 >;
 
+export type AddMessageToThreadMutationVariables = Exact<{
+  threadId: Scalars["ID"];
+  sentTo: Scalars["String"];
+  invitees: Array<Scalars["ID"]>;
+  message: Scalars["String"];
+  images?: Maybe<Array<Maybe<Scalars["String"]>>>;
+}>;
+
+export type AddMessageToThreadMutation = { __typename?: "Mutation" } & {
+  addMessageToThread: { __typename?: "AddMessagePayload" } & Pick<
+    AddMessagePayload,
+    "success" | "threadId"
+  > & {
+      message: { __typename?: "Message" } & Pick<
+        Message,
+        "id" | "created_at" | "message"
+      >;
+      user: { __typename?: "User" } & Pick<
+        User,
+        "id" | "username" | "profileImgUrl"
+      >;
+    };
+};
+
 export type ChangePasswordMutationVariables = Exact<{
   data: ChangePasswordInput;
 }>;
@@ -723,6 +747,22 @@ export type ConfirmUserMutation = { __typename?: "Mutation" } & Pick<
   Mutation,
   "confirmUser"
 >;
+
+export type CreateMessageThreadMutationVariables = Exact<{
+  sentTo: Scalars["String"];
+  invitees: Array<Scalars["ID"]>;
+  message: Scalars["String"];
+  images?: Maybe<Array<Maybe<Scalars["Upload"]>>>;
+}>;
+
+export type CreateMessageThreadMutation = { __typename?: "Mutation" } & {
+  createMessageThread: { __typename?: "Thread" } & Pick<
+    Thread,
+    "id" | "last_message" | "message_count" | "created_at"
+  > & {
+      invitees: Array<{ __typename?: "User" } & Pick<User, "id" | "username">>;
+    };
+};
 
 export type CreateOrUpdateLikesMutationVariables = Exact<{
   input: UpdateLikesInput;
@@ -875,6 +915,65 @@ export type GetGlobalPostsQuery = { __typename?: "Query" } & {
   >;
 };
 
+export type GetMessagesByThreadIdQueryVariables = Exact<{
+  input: GetMessagesByThreadIdInput;
+}>;
+
+export type GetMessagesByThreadIdQuery = { __typename?: "Query" } & {
+  getMessagesByThreadId?: Maybe<
+    { __typename?: "MessageConnection" } & {
+      edges: Array<
+        { __typename?: "MessageEdge" } & {
+          node: { __typename?: "Message" } & Pick<
+            Message,
+            "id" | "created_at" | "message"
+          > & {
+              sentBy: { __typename?: "User" } & Pick<
+                User,
+                "id" | "profileImgUrl"
+              >;
+            };
+        }
+      >;
+      pageInfo: { __typename?: "PageInfo" } & Pick<
+        PageInfo,
+        "startCursor" | "endCursor" | "hasNextPage" | "hasPreviousPage"
+      >;
+    }
+  >;
+};
+
+export type GetOnlyThreadsQueryVariables = Exact<{
+  feedinput: FeedInput;
+}>;
+
+export type GetOnlyThreadsQuery = { __typename?: "Query" } & {
+  getOnlyThreads?: Maybe<
+    { __typename?: "ThreadConnection" } & {
+      edges: Array<
+        { __typename?: "ThreadEdge" } & {
+          node: { __typename?: "Thread" } & Pick<
+            Thread,
+            "id" | "last_message" | "created_at"
+          > & {
+              user: { __typename?: "User" } & Pick<User, "id" | "username">;
+              invitees: Array<
+                { __typename?: "User" } & Pick<
+                  User,
+                  "id" | "username" | "profileImgUrl"
+                >
+              >;
+            };
+        }
+      >;
+      pageInfo: { __typename?: "PageInfo" } & Pick<
+        PageInfo,
+        "startCursor" | "endCursor" | "hasNextPage" | "hasPreviousPage"
+      >;
+    }
+  >;
+};
+
 export type LoginMutationVariables = Exact<{
   username: Scalars["String"];
   password: Scalars["String"];
@@ -914,6 +1013,83 @@ export const TypicalUserResponseFragmentDoc = gql`
   ${ErrorTypicalFragmentDoc}
   ${UserBaseFragmentDoc}
 `;
+export const AddMessageToThreadDocument = gql`
+  mutation AddMessageToThread(
+    $threadId: ID!
+    $sentTo: String!
+    $invitees: [ID!]!
+    $message: String!
+    $images: [String]
+  ) {
+    addMessageToThread(
+      threadId: $threadId
+      sentTo: $sentTo
+      invitees: $invitees
+      message: $message
+      images: $images
+    ) {
+      success
+      threadId
+      message {
+        id
+        created_at
+        message
+      }
+      user {
+        id
+        username
+        profileImgUrl
+      }
+    }
+  }
+`;
+export type AddMessageToThreadMutationFn = Apollo.MutationFunction<
+  AddMessageToThreadMutation,
+  AddMessageToThreadMutationVariables
+>;
+
+/**
+ * __useAddMessageToThreadMutation__
+ *
+ * To run a mutation, you first call `useAddMessageToThreadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddMessageToThreadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addMessageToThreadMutation, { data, loading, error }] = useAddMessageToThreadMutation({
+ *   variables: {
+ *      threadId: // value for 'threadId'
+ *      sentTo: // value for 'sentTo'
+ *      invitees: // value for 'invitees'
+ *      message: // value for 'message'
+ *      images: // value for 'images'
+ *   },
+ * });
+ */
+export function useAddMessageToThreadMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AddMessageToThreadMutation,
+    AddMessageToThreadMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    AddMessageToThreadMutation,
+    AddMessageToThreadMutationVariables
+  >(AddMessageToThreadDocument, baseOptions);
+}
+export type AddMessageToThreadMutationHookResult = ReturnType<
+  typeof useAddMessageToThreadMutation
+>;
+export type AddMessageToThreadMutationResult = Apollo.MutationResult<
+  AddMessageToThreadMutation
+>;
+export type AddMessageToThreadMutationOptions = Apollo.BaseMutationOptions<
+  AddMessageToThreadMutation,
+  AddMessageToThreadMutationVariables
+>;
 export const ChangePasswordDocument = gql`
   mutation ChangePassword($data: ChangePasswordInput!) {
     changePassword(data: $data) {
@@ -1012,6 +1188,76 @@ export type ConfirmUserMutationResult = Apollo.MutationResult<
 export type ConfirmUserMutationOptions = Apollo.BaseMutationOptions<
   ConfirmUserMutation,
   ConfirmUserMutationVariables
+>;
+export const CreateMessageThreadDocument = gql`
+  mutation CreateMessageThread(
+    $sentTo: String!
+    $invitees: [ID!]!
+    $message: String!
+    $images: [Upload]
+  ) {
+    createMessageThread(
+      sentTo: $sentTo
+      invitees: $invitees
+      message: $message
+      images: $images
+    ) {
+      id
+      last_message
+      message_count
+      created_at
+      invitees {
+        id
+        username
+      }
+    }
+  }
+`;
+export type CreateMessageThreadMutationFn = Apollo.MutationFunction<
+  CreateMessageThreadMutation,
+  CreateMessageThreadMutationVariables
+>;
+
+/**
+ * __useCreateMessageThreadMutation__
+ *
+ * To run a mutation, you first call `useCreateMessageThreadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateMessageThreadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createMessageThreadMutation, { data, loading, error }] = useCreateMessageThreadMutation({
+ *   variables: {
+ *      sentTo: // value for 'sentTo'
+ *      invitees: // value for 'invitees'
+ *      message: // value for 'message'
+ *      images: // value for 'images'
+ *   },
+ * });
+ */
+export function useCreateMessageThreadMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateMessageThreadMutation,
+    CreateMessageThreadMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    CreateMessageThreadMutation,
+    CreateMessageThreadMutationVariables
+  >(CreateMessageThreadDocument, baseOptions);
+}
+export type CreateMessageThreadMutationHookResult = ReturnType<
+  typeof useCreateMessageThreadMutation
+>;
+export type CreateMessageThreadMutationResult = Apollo.MutationResult<
+  CreateMessageThreadMutation
+>;
+export type CreateMessageThreadMutationOptions = Apollo.BaseMutationOptions<
+  CreateMessageThreadMutation,
+  CreateMessageThreadMutationVariables
 >;
 export const CreateOrUpdateLikesDocument = gql`
   mutation CreateOrUpdateLikes($input: UpdateLikesInput!) {
@@ -1548,6 +1794,155 @@ export type GetGlobalPostsLazyQueryHookResult = ReturnType<
 export type GetGlobalPostsQueryResult = Apollo.QueryResult<
   GetGlobalPostsQuery,
   GetGlobalPostsQueryVariables
+>;
+export const GetMessagesByThreadIdDocument = gql`
+  query GetMessagesByThreadId($input: GetMessagesByThreadIdInput!) {
+    getMessagesByThreadId(input: $input) {
+      edges {
+        node {
+          id
+          created_at
+          message
+          sentBy {
+            id
+            profileImgUrl
+          }
+        }
+      }
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetMessagesByThreadIdQuery__
+ *
+ * To run a query within a React component, call `useGetMessagesByThreadIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMessagesByThreadIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMessagesByThreadIdQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetMessagesByThreadIdQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetMessagesByThreadIdQuery,
+    GetMessagesByThreadIdQueryVariables
+  >
+) {
+  return Apollo.useQuery<
+    GetMessagesByThreadIdQuery,
+    GetMessagesByThreadIdQueryVariables
+  >(GetMessagesByThreadIdDocument, baseOptions);
+}
+export function useGetMessagesByThreadIdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetMessagesByThreadIdQuery,
+    GetMessagesByThreadIdQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<
+    GetMessagesByThreadIdQuery,
+    GetMessagesByThreadIdQueryVariables
+  >(GetMessagesByThreadIdDocument, baseOptions);
+}
+export type GetMessagesByThreadIdQueryHookResult = ReturnType<
+  typeof useGetMessagesByThreadIdQuery
+>;
+export type GetMessagesByThreadIdLazyQueryHookResult = ReturnType<
+  typeof useGetMessagesByThreadIdLazyQuery
+>;
+export type GetMessagesByThreadIdQueryResult = Apollo.QueryResult<
+  GetMessagesByThreadIdQuery,
+  GetMessagesByThreadIdQueryVariables
+>;
+export const GetOnlyThreadsDocument = gql`
+  query GetOnlyThreads($feedinput: FeedInput!) {
+    getOnlyThreads(feedinput: $feedinput) {
+      edges {
+        node {
+          id
+          user {
+            id
+            username
+          }
+          last_message
+          created_at
+          invitees {
+            id
+            username
+            profileImgUrl
+          }
+        }
+      }
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetOnlyThreadsQuery__
+ *
+ * To run a query within a React component, call `useGetOnlyThreadsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOnlyThreadsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOnlyThreadsQuery({
+ *   variables: {
+ *      feedinput: // value for 'feedinput'
+ *   },
+ * });
+ */
+export function useGetOnlyThreadsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetOnlyThreadsQuery,
+    GetOnlyThreadsQueryVariables
+  >
+) {
+  return Apollo.useQuery<GetOnlyThreadsQuery, GetOnlyThreadsQueryVariables>(
+    GetOnlyThreadsDocument,
+    baseOptions
+  );
+}
+export function useGetOnlyThreadsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetOnlyThreadsQuery,
+    GetOnlyThreadsQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<GetOnlyThreadsQuery, GetOnlyThreadsQueryVariables>(
+    GetOnlyThreadsDocument,
+    baseOptions
+  );
+}
+export type GetOnlyThreadsQueryHookResult = ReturnType<
+  typeof useGetOnlyThreadsQuery
+>;
+export type GetOnlyThreadsLazyQueryHookResult = ReturnType<
+  typeof useGetOnlyThreadsLazyQuery
+>;
+export type GetOnlyThreadsQueryResult = Apollo.QueryResult<
+  GetOnlyThreadsQuery,
+  GetOnlyThreadsQueryVariables
 >;
 export const LoginDocument = gql`
   mutation Login($username: String!, $password: String!) {
