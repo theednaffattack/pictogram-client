@@ -15,12 +15,11 @@ import { WebSocketLink } from "@apollo/client/link/ws";
 import { SubscriptionClient } from "subscriptions-transport-ws";
 import { onError } from "@apollo/client/link/error";
 import { RetryLink } from "@apollo/client/link/retry";
-import Router from "next/router";
+// import Router from "next/router";
 
 import { parseCookies } from "../lib/utilities.parse-cookies";
 import { isServer } from "../lib/utilities.is-server";
-// import redirect from "./utilities.redirect";
-
+import Router from "next/router";
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
@@ -60,7 +59,6 @@ const splitLink = !isServer()
 
 const authLink = setContext((_, { headers, req }) => {
   const token = parseCookies(req)[process.env.NEXT_PUBLIC_COOKIE_PREFIX!];
-  
 
   return {
     headers: {
@@ -70,34 +68,42 @@ const authLink = setContext((_, { headers, req }) => {
   };
 });
 
-
-
-const errorLink = onError(({ graphQLErrors, networkError,  }) => {
+const errorLink = onError(({ graphQLErrors, networkError, operation }) => {
   console.log("VIEW GQL ERRORS", graphQLErrors);
 
   // We don't want the home page to re-route so don't include
-  // "createOrUpdateLikes" mutations to be filtered out and 
+  // "createOrUpdateLikes" mutations to be filtered out and
   // redirected.
-  const filteredAuthErrors = graphQLErrors && graphQLErrors.filter((error)=>error.message === "Not authenticated" && !error.path?.includes("createOrUpdateLikes"))
-  
-  if(filteredAuthErrors && filteredAuthErrors.length > 0){
+  const filteredAuthErrors =
+    graphQLErrors &&
+    graphQLErrors.filter(
+      (error) =>
+        error.message === "Not authenticated" &&
+        !error.path?.includes("createOrUpdateLikes")
+    );
+
+  if (filteredAuthErrors && filteredAuthErrors.length > 0) {
     console.log("GOD KNOWS FILTERED AUTH ERRORS", filteredAuthErrors);
-    !isServer() && Router.push("/login?flash=You must be authenticated")
+
+    !isServer() && Router.replace("/login?flash=You must be authenticated");
     return;
   }
-  
+
   console.log("STILL GOING?");
-  
-  const filteredRoutes = graphQLErrors && graphQLErrors?.filter((errorThing)=>{
-    const {path} = errorThing;
-    const something = path && typeof path[0] === "string" ? path[0] : ""
-  
-    
-    return something === "register";
-    
-  })
-  
-  if (graphQLErrors && filteredRoutes && filteredRoutes.length < 1 || graphQLErrors && !filteredRoutes) {
+
+  const filteredRoutes =
+    graphQLErrors &&
+    graphQLErrors?.filter((errorThing) => {
+      const { path } = errorThing;
+      const something = path && typeof path[0] === "string" ? path[0] : "";
+
+      return something === "register";
+    });
+
+  if (
+    (graphQLErrors && filteredRoutes && filteredRoutes.length < 1) ||
+    (graphQLErrors && !filteredRoutes)
+  ) {
     graphQLErrors.map(({ message, locations, path }) =>
       console.warn(
         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
@@ -109,12 +115,19 @@ const errorLink = onError(({ graphQLErrors, networkError,  }) => {
 
 function createApolloClient() {
   return new ApolloClient({
+    connectToDevTools: true,
     ssrMode: typeof window === "undefined",
     cache: new InMemoryCache({
       typePolicies: {
         Query: {
           fields: {
-            getGlobalPostsRelay: relayStylePagination()
+            getGlobalPostsRelay: relayStylePagination(),
+            getMessagesByThreadId: {
+              merge(existing = {}, incoming: any, { mergeObjects }) {
+                console.log("MERGE", { existing, incoming });
+                return mergeObjects(existing, incoming);
+              }
+            }
           }
         }
       }
