@@ -12,6 +12,7 @@ import NextLink from "next/link";
 import React from "react";
 
 import { LikesAndCommentsSummary } from "../components/home.global-feed.likes";
+import { LayoutAuthenticated } from "../components/layout-authenticated";
 import { useGetGlobalPostsRelayQuery } from "../generated/graphql";
 function Index() {
   const initialGlobalPostsVariables = {
@@ -36,15 +37,15 @@ function Index() {
   });
 
   return (
-    <Flex flexDirection="column" alignItems="center">
-      <Flex alignItems="center" width={[1 / 2, 1 / 2, 1 / 2, "900px"]}>
-        <Heading>Branding</Heading>
+    // <Flex flexDirection="column" alignItems="center">
+    //   <Flex alignItems="center" width={[1 / 2, 1 / 2, 1 / 2, "900px"]}>
+    //     <Heading>Branding</Heading>
 
-        <NextLink href="/create-post" passHref>
-          <Link ml="auto">create post</Link>
-        </NextLink>
-      </Flex>
-      
+    //     <NextLink href="/create-post" passHref>
+    //       <Link ml="auto">create post</Link>
+    //     </NextLink>
+    //   </Flex>
+    <LayoutAuthenticated>
       <Stack mb={50}>
         {dataPosts
           ? dataPosts.getGlobalPostsRelay?.edges.map(
@@ -63,19 +64,16 @@ function Index() {
                 return (
                   <Box key={id}>
                     <Heading>{title}</Heading>
-                    <Box maxWidth="350px">
+                    <Box>
                       <Image src={images && images[0] ? images[0].uri : ""} />
                       <Flex>
-                      <Text ml="auto">{created_at}</Text>
+                        <Text ml="auto">{created_at}</Text>
                       </Flex>
                       <Text>{text}</Text>
                     </Box>
                     <NextLink href={`/post/${id}`} passHref>
-                      <Link>
-                      open: {id}
-                      </Link>
+                      <Link>open: {id}</Link>
                     </NextLink>
-                    
 
                     <LikesAndCommentsSummary
                       comments_count={comments_count}
@@ -108,13 +106,17 @@ function Index() {
           </Button>
         ) : null}
       </Stack>
-      {/* <GlobalPostsStack
-        posts={dataPosts?.getGlobalPostsRelay?.edges}
-        postsError={errorPosts}
-        postsFetching={loadingPosts}
-      /> */}
-    </Flex>
+    </LayoutAuthenticated>
+    // </Flex>
   );
 }
 
 export default Index;
+
+{
+  /* <GlobalPostsStack
+        posts={dataPosts?.getGlobalPostsRelay?.edges}
+        postsError={errorPosts}
+        postsFetching={loadingPosts}
+      /> */
+}
