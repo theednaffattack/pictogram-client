@@ -25,7 +25,7 @@ export const InputField: React.FC<InputFieldProps> = ({
   const [field, { error }] = useField({ name });
   return (
     <FormControl isRequired={isRequired} isInvalid={!!error}>
-      {props.type === "hidden" ? null : (
+      {props.type === "hidden" || label === "" ? null : (
         <FormLabel htmlFor={field.name}>{label}</FormLabel>
       )}
       <Input {...field} {...props} id={field.name} placeholder={placeholder} />
