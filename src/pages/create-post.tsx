@@ -6,7 +6,7 @@ import React from "react";
 
 import { InputField } from "../components/forms.input-field";
 import { TextArea } from "../components/forms.textarea";
-import { Layout } from "../components/layout.basic";
+import { LayoutAuthenticated } from "../components/layout-authenticated";
 import {
   MeDocument,
   MeQuery,
@@ -16,15 +16,12 @@ import {
 import { initializeApollo } from "../lib/config.apollo-client";
 import { MyContext } from "../lib/types";
 
-
 type CreatePostProps = {
   me: MeQuery;
   router?: Router;
 };
 
-const CreatePost: NextPage<CreatePostProps> = ({router}) => {
-  
-  
+const CreatePost: NextPage<CreatePostProps> = ({ router }) => {
   const [createPost, { error }] = useCreatePostMutation({
     update(cache, { data: postMutationData }) {
       // if there's no data don't screw around with the cache
@@ -64,7 +61,7 @@ const CreatePost: NextPage<CreatePostProps> = ({router}) => {
     }
   });
   return (
-    <Layout>
+    <LayoutAuthenticated>
       <Box>
         <Text fontSize="3xl">Create Post</Text>
         <Formik
@@ -146,14 +143,12 @@ const CreatePost: NextPage<CreatePostProps> = ({router}) => {
           }}
         </Formik>
       </Box>
-    </Layout>
+    </LayoutAuthenticated>
   );
 };
 
 CreatePost.getInitialProps = async (ctx: MyContext) => {
   if (!ctx.apolloClient) ctx.apolloClient = initializeApollo();
-
-  
 
   let meResponse;
   try {
@@ -165,7 +160,7 @@ CreatePost.getInitialProps = async (ctx: MyContext) => {
   }
 
   return {
-    me: meResponse?.data ? meResponse?.data : {},
+    me: meResponse?.data ? meResponse?.data : {}
   };
 };
 
