@@ -1,54 +1,45 @@
 import { NextPage } from "next";
 import { Router } from "next/router";
 import React from "react";
-import { MeDocument, MeQuery } from "../../generated/graphql";
+import { Box, Heading, Image, Text } from "@chakra-ui/core";
+
+import {
+  MeDocument,
+  MeQuery,
+  useGetGlobalPostByIdQuery
+} from "../../generated/graphql";
 import { initializeApollo } from "../../lib/config.apollo-client";
 import { MyContext } from "../../lib/types";
-// import { ParsedUrlQuery } from "querystring";
-
-// import { Header } from "../../src/components/Header";
-// import { HelloWorldComponent } from "../../src/components/generated/apollo-graphql";
-// import { getLayout } from "../../src/modules/site-layout/layout";
-// import { IExtendedPageProps } from "../../src/page-types/types";
-// import { MyContext } from "types/types";
-
-// interface IPostById {
-//   ({ pathname, id, query }: IExtendedPageProps): JSX.Element;
-
-//   getInitialProps: ({
-//     pathname,
-//     query
-//   }: MyContext) => Promise<{
-//     pathname: string;
-//     query: ParsedUrlQuery;
-//   }>;
-
-//   getLayout: (page: any) => JSX.Element;
-
-//   title: string;
-// }
 
 type PostByIdProps = {
   router?: Router;
   me: MeQuery;
-}
+};
 
 const PostById: NextPage<PostByIdProps> = ({ router }) => {
+  const { data } = useGetGlobalPostByIdQuery({
+    variables: {
+      getpostinput: {
+        postId: router?.query.postId as string
+      }
+    }
+  });
   return (
-    
-        <>
-        
-          <h1>Post: {JSON.stringify({ id: router?.query.id as string })}</h1>
-          <h1>Post: {JSON.stringify({ pathname: router?.pathname })}</h1>
-          <h1>Post: {JSON.stringify({ query: router?.query })}</h1>
-        </>
+    <>
+      <Heading as="h1" size="4xl" isTruncated>
+        {" "}
+        {data?.getGlobalPostById?.title}
+      </Heading>
+      <Text> {data?.getGlobalPostById?.text}</Text>
+      <Box w={{ sm: "100%", md: "100%", lg: "33%", xl: "33%" }}>
+        <Image src={data?.getGlobalPostById?.images?.[0].uri} />
+      </Box>
+    </>
   );
 };
 
 PostById.getInitialProps = async (ctx: MyContext) => {
   if (!ctx.apolloClient) ctx.apolloClient = initializeApollo();
-
-  
 
   let meResponse;
   try {
@@ -60,7 +51,7 @@ PostById.getInitialProps = async (ctx: MyContext) => {
   }
 
   return {
-    me: meResponse?.data ? meResponse?.data : {},
+    me: meResponse?.data ? meResponse?.data : {}
   };
 };
 
