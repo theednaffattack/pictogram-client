@@ -1,13 +1,15 @@
 import { ApolloProvider } from "@apollo/client";
-import { ChakraProvider, CSSReset } from "@chakra-ui/core";
+import { ChakraProvider, CSSReset, useMediaQuery } from "@chakra-ui/core";
 import { AppProps } from "next/app";
-import Router  from "next/router";
+import Router from "next/router";
 import { useEffect } from "react";
 import { useApollo } from "../lib/config.apollo-client";
 import theme from "../lib/theme";
 
 function MyApp({ Component, pageProps, router }: AppProps) {
   const apolloClient = useApollo(pageProps.initialApolloState);
+
+  const [isNOTLgScreen] = useMediaQuery("(max-width: 62em)");
 
   const syncLogout = (event: StorageEvent) => {
     if (event.key === "logout") {
@@ -29,7 +31,11 @@ function MyApp({ Component, pageProps, router }: AppProps) {
     <ChakraProvider resetCSS theme={theme}>
       <ApolloProvider client={apolloClient}>
         <CSSReset />
-        <Component {...pageProps} router={router}  />
+        <Component
+          {...pageProps}
+          router={router}
+          isNOTLgScreen={isNOTLgScreen}
+        />
       </ApolloProvider>
     </ChakraProvider>
   );
