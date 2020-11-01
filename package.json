@@ -44,6 +44,7 @@
     "react-icons": "^3.11.0",
     "react-is": "^16.13.1",
     "react-lottie": "^1.2.3",
+    "react-modal": "^3.11.2",
     "subscriptions-transport-ws": "^0.9.18",
     "urql": "^1.10.1",
     "wonka": "^4.0.14"
