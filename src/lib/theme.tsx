@@ -1,5 +1,4 @@
 import { theme as chakraTheme } from "@chakra-ui/core";
-import { theme as uiTheme } from "@chakra-ui/theme";
 
 const fonts = { ...chakraTheme.fonts, mono: `'Menlo', monospace` };
 
@@ -42,7 +41,6 @@ const spaces = {
 
 const theme = {
   ...chakraTheme,
-  breakpoints: uiTheme.breakpoints,
   colors,
   fonts,
   fontSizes,

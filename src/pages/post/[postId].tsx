@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import { Router } from "next/router";
 import React from "react";
-import { Box, Heading, Image, Text } from "@chakra-ui/core";
+import { Box, Flex, Heading, Image, Text } from "@chakra-ui/core";
 
 import {
   MeDocument,
@@ -25,7 +25,7 @@ const PostById: NextPage<PostByIdProps> = ({ router }) => {
     }
   });
   return (
-    <>
+    <Flex flexDirection="column">
       <Heading as="h1" size="4xl" isTruncated>
         {" "}
         {data?.getGlobalPostById?.title}
@@ -34,7 +34,7 @@ const PostById: NextPage<PostByIdProps> = ({ router }) => {
       <Box w={{ sm: "100%", md: "100%", lg: "33%", xl: "33%" }}>
         <Image src={data?.getGlobalPostById?.images?.[0].uri} />
       </Box>
-    </>
+    </Flex>
   );
 };
 
