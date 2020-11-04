@@ -22,10 +22,14 @@ query GetGlobalPostsRelay(
         id
         title
         text
-
         likes_count
         comments_count
         currently_liked
+        user {
+          id
+          username
+          profileImgUrl
+        }
         images {
           id
           uri

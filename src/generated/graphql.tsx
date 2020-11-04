@@ -262,6 +262,7 @@ export type MessageConnection = {
 
 export type MessageEdge = {
   __typename?: "MessageEdge";
+  cursor: Scalars["String"];
   node: Message;
 };
 
@@ -856,6 +857,12 @@ export type GetGlobalPostsRelayQuery = { __typename?: "Query" } & {
               | "currently_liked"
               | "created_at"
             > & {
+                user?: Maybe<
+                  { __typename?: "User" } & Pick<
+                    User,
+                    "id" | "username" | "profileImgUrl"
+                  >
+                >;
                 images?: Maybe<
                   Array<{ __typename?: "Image" } & Pick<Image, "id" | "uri">>
                 >;
@@ -912,6 +919,25 @@ export type GetGlobalPostsQuery = { __typename?: "Query" } & {
           >;
         }
     >
+  >;
+};
+
+export type GetListToCreateThreadQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type GetListToCreateThreadQuery = { __typename?: "Query" } & {
+  getListToCreateThread?: Maybe<
+    { __typename?: "TransUserReturn" } & Pick<TransUserReturn, "id"> & {
+        thoseICanMessage?: Maybe<
+          Array<
+            { __typename?: "User" } & Pick<
+              User,
+              "id" | "username" | "profileImgUrl"
+            >
+          >
+        >;
+      }
   >;
 };
 
@@ -1594,6 +1620,11 @@ export const GetGlobalPostsRelayDocument = gql`
           likes_count
           comments_count
           currently_liked
+          user {
+            id
+            username
+            profileImgUrl
+          }
           images {
             id
             uri
@@ -1794,6 +1825,66 @@ export type GetGlobalPostsLazyQueryHookResult = ReturnType<
 export type GetGlobalPostsQueryResult = Apollo.QueryResult<
   GetGlobalPostsQuery,
   GetGlobalPostsQueryVariables
+>;
+export const GetListToCreateThreadDocument = gql`
+  query GetListToCreateThread {
+    getListToCreateThread {
+      id
+      thoseICanMessage {
+        id
+        username
+        profileImgUrl
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetListToCreateThreadQuery__
+ *
+ * To run a query within a React component, call `useGetListToCreateThreadQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetListToCreateThreadQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetListToCreateThreadQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetListToCreateThreadQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetListToCreateThreadQuery,
+    GetListToCreateThreadQueryVariables
+  >
+) {
+  return Apollo.useQuery<
+    GetListToCreateThreadQuery,
+    GetListToCreateThreadQueryVariables
+  >(GetListToCreateThreadDocument, baseOptions);
+}
+export function useGetListToCreateThreadLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetListToCreateThreadQuery,
+    GetListToCreateThreadQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<
+    GetListToCreateThreadQuery,
+    GetListToCreateThreadQueryVariables
+  >(GetListToCreateThreadDocument, baseOptions);
+}
+export type GetListToCreateThreadQueryHookResult = ReturnType<
+  typeof useGetListToCreateThreadQuery
+>;
+export type GetListToCreateThreadLazyQueryHookResult = ReturnType<
+  typeof useGetListToCreateThreadLazyQuery
+>;
+export type GetListToCreateThreadQueryResult = Apollo.QueryResult<
+  GetListToCreateThreadQuery,
+  GetListToCreateThreadQueryVariables
 >;
 export const GetMessagesByThreadIdDocument = gql`
   query GetMessagesByThreadId($input: GetMessagesByThreadIdInput!) {
