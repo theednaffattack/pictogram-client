@@ -124,7 +124,6 @@ function createApolloClient() {
             getGlobalPostsRelay: relayStylePagination(),
             getMessagesByThreadId: {
               merge(existing = {}, incoming: any, { mergeObjects }) {
-                console.log("MERGE", { existing, incoming });
                 return mergeObjects(existing, incoming);
               }
             }
