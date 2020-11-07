@@ -6,6 +6,7 @@ import { UploadComponent } from "../pages/messages/upload-component";
 import { AddFileIcon } from "./add-file-icon";
 import { InputField } from "./forms.input-field";
 import { MessagesByThreadId } from "./messages-by-thread-id";
+import { Thumb } from "./thumb";
 
 type MessagesGridProps = {
   children: ReactChild | ReactChildren | null;
@@ -59,19 +60,27 @@ export function MessagesGrid({
       {...getRootProps({ className: "dropzone" })}
     >
       {children}
+
       <Grid gridTemplateRows="1fr 60px">
         <Stack>
           {threadId ? <MessagesByThreadId threadId={threadId} /> : null}
+          <Text>{values?.images?.[0]?.name}</Text>
         </Stack>
         {threadId ? (
           <Flex
             pb={5}
             borderTop="1pz solid #eee"
             bg="rgb(255,255,255)"
+            flexDirection="column"
             position="fixed"
             bottom={0}
             w="100%"
           >
+            <Flex>
+              {values?.images?.map((image) => (
+                <Thumb key={image.name + image.lastModified} file={image} />
+              ))}
+            </Flex>
             <Form
               onSubmit={handleSubmit}
               style={{ height: "100%", width: "100%", display: "flex" }}
