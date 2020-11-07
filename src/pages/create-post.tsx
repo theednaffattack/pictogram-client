@@ -22,7 +22,7 @@ type CreatePostProps = {
 };
 
 const CreatePost: NextPage<CreatePostProps> = ({ router }) => {
-  const [createPost, { error }] = useCreatePostMutation({
+  const [createPost, { error: errorCreatePost }] = useCreatePostMutation({
     update(cache, { data: postMutationData }) {
       // if there's no data don't screw around with the cache
       if (!postMutationData) return;
@@ -75,7 +75,7 @@ const CreatePost: NextPage<CreatePostProps> = ({ router }) => {
             actions.resetForm({
               values: { text: "", title: "", images: [] }
             });
-            if (!error && router) {
+            if (!errorCreatePost && router) {
               router.push("/");
             }
           }}
