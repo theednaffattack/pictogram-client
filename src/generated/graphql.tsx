@@ -814,6 +814,21 @@ export type RegisterMutation = { __typename?: "Mutation" } & {
   register: { __typename?: "UserResponse" } & TypicalUserResponseFragment;
 };
 
+export type SignS3MutationVariables = Exact<{
+  files: Array<ImageSubInput>;
+}>;
+
+export type SignS3Mutation = { __typename?: "Mutation" } & {
+  signS3: { __typename?: "SignedS3Payload" } & {
+    signatures: Array<
+      { __typename?: "SignedS3SubPayload" } & Pick<
+        SignedS3SubPayload,
+        "url" | "signedRequest"
+      >
+    >;
+  };
+};
+
 export type GetGlobalPostByIdQueryVariables = Exact<{
   getpostinput: GetGlobalPostByIdInput;
 }>;
@@ -1529,6 +1544,55 @@ export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<
   RegisterMutation,
   RegisterMutationVariables
+>;
+export const SignS3Document = gql`
+  mutation SignS3($files: [ImageSubInput!]!) {
+    signS3(files: $files) {
+      signatures {
+        url
+        signedRequest
+      }
+    }
+  }
+`;
+export type SignS3MutationFn = Apollo.MutationFunction<
+  SignS3Mutation,
+  SignS3MutationVariables
+>;
+
+/**
+ * __useSignS3Mutation__
+ *
+ * To run a mutation, you first call `useSignS3Mutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSignS3Mutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [signS3Mutation, { data, loading, error }] = useSignS3Mutation({
+ *   variables: {
+ *      files: // value for 'files'
+ *   },
+ * });
+ */
+export function useSignS3Mutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SignS3Mutation,
+    SignS3MutationVariables
+  >
+) {
+  return Apollo.useMutation<SignS3Mutation, SignS3MutationVariables>(
+    SignS3Document,
+    baseOptions
+  );
+}
+export type SignS3MutationHookResult = ReturnType<typeof useSignS3Mutation>;
+export type SignS3MutationResult = Apollo.MutationResult<SignS3Mutation>;
+export type SignS3MutationOptions = Apollo.BaseMutationOptions<
+  SignS3Mutation,
+  SignS3MutationVariables
 >;
 export const GetGlobalPostByIdDocument = gql`
   query GetGlobalPostById($getpostinput: GetGlobalPostByIdInput!) {
