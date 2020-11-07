@@ -11,20 +11,19 @@ type UploadComponentProps = {
 };
 
 export function UploadComponent({
-  getInputProps
-}: // isDragActive,
-// setFieldValue
-UploadComponentProps) {
+  getInputProps,
+  isDragActive
+}: UploadComponentProps) {
   return (
     <div>
       {}
       <div>
         <input {...getInputProps()} />
-        {/* {isDragActive ? (
+        {isDragActive ? (
           <p>Drop the files here ...</p>
         ) : (
           <p>Drag 'n' drop some files here, or click to select files</p>
-        )} */}
+        )}
       </div>
     </div>
   );
