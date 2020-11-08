@@ -34,3 +34,5 @@ yarn-error.log*
 # vercel
 .vercel
 src/lib/836-like-button.json
+deploy.sh
+.env
