@@ -68,7 +68,7 @@ const authLink = setContext((_, { headers, req }) => {
   };
 });
 
-const errorLink = onError(({ graphQLErrors, networkError, operation }) => {
+const errorLink = onError(({ graphQLErrors, networkError }) => {
   console.log("VIEW GQL ERRORS", graphQLErrors);
 
   // We don't want the home page to re-route so don't include

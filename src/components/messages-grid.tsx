@@ -2,7 +2,7 @@ import { Center, Flex, Grid, IconButton, Stack, Text } from "@chakra-ui/core";
 import { Form } from "formik";
 import React, { ReactChild, ReactChildren } from "react";
 import { useDropzone } from "react-dropzone";
-import { UploadComponent } from "../pages/messages/upload-component";
+import { UploadComponent } from "./upload-component";
 import { AddFileIcon } from "./add-file-icon";
 import { InputField } from "./forms.input-field";
 import { MessagesByThreadId } from "./messages-by-thread-id";

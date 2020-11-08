@@ -17,7 +17,7 @@ type MessagesProps = {
 };
 
 const Messages: NextPage<MessagesProps> = ({ isNOTLgScreen }) => {
-  const [imageFiles, setImageFiles] = useState<File[]>();
+  // const [imageFiles, setImageFiles] = useState<File[]>();
 
   const [invitees, setInvitees] = useState<
     ({
@@ -26,7 +26,7 @@ const Messages: NextPage<MessagesProps> = ({ isNOTLgScreen }) => {
   >();
   const [threadId, setThreadId] = useState<string | undefined>(undefined);
 
-  const [addMessage, { data }] = useAddMessageToThreadMutation();
+  const [addMessage] = useAddMessageToThreadMutation();
 
   const { data: dataThreads } = useGetOnlyThreadsQuery({
     variables: {
@@ -39,7 +39,7 @@ const Messages: NextPage<MessagesProps> = ({ isNOTLgScreen }) => {
   const initialFormValues = {
     message: "",
     images: [],
-    invitees: [],
+    invitees: [] as any[],
     threadId: "",
     sentTo: ""
   };

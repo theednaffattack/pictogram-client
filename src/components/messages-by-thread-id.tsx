@@ -64,7 +64,10 @@ export function MessagesByThreadId({ threadId }: { threadId: string }) {
                 {loading ? (
                   <SkeletonCircle size="10" />
                 ) : (
-                  <Avatar ml="auto" src={node.sentBy.profileImgUrl} />
+                  <Avatar
+                    ml="auto"
+                    src={node.sentBy.profileImgUrl || undefined}
+                  />
                 )}
               </Flex>
             );

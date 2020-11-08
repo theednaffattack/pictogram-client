@@ -1,4 +1,4 @@
-import { Box, Flex, Image as ChImage, Skeleton, Text } from "@chakra-ui/core";
+import { Box, Flex, Skeleton, Text } from "@chakra-ui/core";
 import React from "react";
 import {
   GlobalPostReturnType,

@@ -1,4 +1,4 @@
-import { Button, Flex, Icon, Text } from "@chakra-ui/core";
+import { Button, Flex, Text } from "@chakra-ui/core";
 import { Field, FieldArray, Form, Formik } from "formik";
 import Axios from "axios";
 import React from "react";
@@ -50,13 +50,13 @@ export const CreatePostWithupload: React.FC<CreatePostWithuploadProps> = ({
 }) => {
   const router = useRouter();
   const [
-    signS3,
-    { data: dataSignS3, error: errorSignS3, loading: loadingSignS3 }
+    signS3
+    // { data: dataSignS3, error: errorSignS3, loading: loadingSignS3 }
   ] = useSignS3Mutation();
 
   const [
     createPost,
-    { data: dataCreatePost, error: errorCreatePost, loading: loadingCreatePost }
+    { data: dataCreatePost, error: errorCreatePost }
   ] = useCreatePostMutation({
     update(cache, { data: postMutationData }) {
       // if there's no data don't screw around with the cache

@@ -31,7 +31,7 @@ interface FauxCameraProps {
 }
 
 const FauxCamera: React.FunctionComponent<FauxCameraProps> = ({
-  cameraDispatch,
+  // cameraDispatch,
   cameraState
 }) => {
   // const canvasRef = useRef<HTMLCanvasElement>(null);

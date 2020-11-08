@@ -35,7 +35,7 @@ const Camera: React.FunctionComponent<CameraProps> = ({
   const [container, setContainer] = useState({ width: 0, height: 0 });
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [isCanvasEmpty, setIsCanvasEmpty] = useState(true);
-  const [isFlashing, setIsFlashing] = useState(false);
+  const [, setIsFlashing] = useState(false);
 
   const mediaStream = useUserMedia(CAPTURE_OPTIONS);
   const [aspectRatio, calculateRatio] = useCardRatio(1.586);

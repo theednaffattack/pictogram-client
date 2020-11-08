@@ -2,7 +2,7 @@ import { Box, Text } from "@chakra-ui/core";
 import { NextPage } from "next";
 import * as React from "react";
 import { LayoutAuthenticated } from "../../components/layout-authenticated";
-import { useCreatePostMutation, PostConnection } from "../../generated/graphql";
+// import { useCreatePostMutation, PostConnection } from "../../generated/graphql";
 import { CameraModule } from "../../components/camera";
 import { Router } from "next/router";
 
@@ -67,7 +67,7 @@ type NewProps = {
   router: Router;
 };
 
-const New: NextPage<NewProps> = ({ router }) => {
+const New: NextPage<NewProps> = () => {
   // const [isCameraOpen, setIsCameraOpen] = React.useState(initialCameraState);
   // const [cardImage, setCardImage] = React.useState<Blob>();
   // const [postCreated, setPostCreated] = React.useState(initialPostCreatedState);
@@ -78,44 +78,44 @@ const New: NextPage<NewProps> = ({ router }) => {
     initCamera
   );
 
-  const [createPost, { error: errorCreatePost }] = useCreatePostMutation({
-    update(cache, { data: postMutationData }) {
-      // if there's no data don't screw around with the cache
-      if (!postMutationData) return;
+  // const [createPost, { error: errorCreatePost }] = useCreatePostMutation({
+  //   update(cache, { data: postMutationData }) {
+  //     // if there's no data don't screw around with the cache
+  //     if (!postMutationData) return;
 
-      cache.modify({
-        fields: {
-          getGlobalPostsRelay(existingPosts): PostConnection {
-            const { edges, __typename, pageInfo } = existingPosts;
+  //     cache.modify({
+  //       fields: {
+  //         getGlobalPostsRelay(existingPosts): PostConnection {
+  //           const { edges, __typename, pageInfo } = existingPosts;
 
-            return {
-              edges: [
-                {
-                  __typename: "PostEdge",
-                  cursor: new Date().toISOString(),
-                  node: {
-                    comments_count: 0,
-                    likes_count: 0,
-                    currently_liked: false,
-                    likes: [],
-                    created_at: new Date().toISOString(),
-                    __typename: postMutationData?.createPost.__typename,
-                    images: postMutationData?.createPost.images,
-                    text: postMutationData?.createPost.text,
-                    title: postMutationData?.createPost.title,
-                    id: postMutationData?.createPost.id
-                  }
-                },
-                ...edges
-              ],
-              __typename,
-              pageInfo
-            };
-          }
-        }
-      });
-    }
-  });
+  //           return {
+  //             edges: [
+  //               {
+  //                 __typename: "PostEdge",
+  //                 cursor: new Date().toISOString(),
+  //                 node: {
+  //                   comments_count: 0,
+  //                   likes_count: 0,
+  //                   currently_liked: false,
+  //                   likes: [],
+  //                   created_at: new Date().toISOString(),
+  //                   __typename: postMutationData?.createPost.__typename,
+  //                   images: postMutationData?.createPost.images,
+  //                   text: postMutationData?.createPost.text,
+  //                   title: postMutationData?.createPost.title,
+  //                   id: postMutationData?.createPost.id
+  //                 }
+  //               },
+  //               ...edges
+  //             ],
+  //             __typename,
+  //             pageInfo
+  //           };
+  //         }
+  //       }
+  //     });
+  //   }
+  // });
   return (
     <LayoutAuthenticated>
       <Box>

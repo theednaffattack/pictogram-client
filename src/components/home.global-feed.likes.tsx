@@ -63,7 +63,7 @@ export function LikesAndCommentsSummary({
               onClick={async () => {
                 try {
                   await createOrUpdateLikes({
-                    update(cache, { data: likeData }) {
+                    update(cache) {
                       const existing = cache.readQuery<
                         GetGlobalPostsRelayQuery,
                         GetGlobalPostsRelayQueryVariables
@@ -142,7 +142,7 @@ export function LikesAndCommentsSummary({
               onClick={async () => {
                 try {
                   await createOrUpdateLikes({
-                    update(cache, { data: likeData }) {
+                    update(cache) {
                       const existing = cache.readQuery<
                         GetGlobalPostsRelayQuery,
                         GetGlobalPostsRelayQueryVariables
