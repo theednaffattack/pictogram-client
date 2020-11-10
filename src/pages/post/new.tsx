@@ -77,12 +77,12 @@ type NewProps = {
 };
 
 const New: NextPage<NewProps> = ({ router }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [cameraState, cameraDispatch] = React.useReducer(
     cameraReducer,
     initialCameraState,
     initCamera
   );
+  console.log({ cameraState, cameraDispatch });
 
   const [
     signS3

@@ -7,7 +7,6 @@ import styles from "../components/camera.module.css";
 
 import { useOffsets, useCardRatio, useUserMedia } from "../lib/custom-hooks";
 import { CameraAction, CameraStateType } from "../pages/post/new";
-import { CreatePostWithupload } from "./create-post-with-upload";
 
 export interface SizeRect {
   readonly width: number;
@@ -24,10 +23,7 @@ interface CameraProps {
   cameraState: CameraStateType;
 }
 
-const Camera: React.FunctionComponent<CameraProps> = ({
-  cameraDispatch,
-  cameraState
-}) => {
+const Camera: React.FunctionComponent<CameraProps> = ({ cameraDispatch }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const listContainerRef = useRef<HTMLDivElement>(null);
