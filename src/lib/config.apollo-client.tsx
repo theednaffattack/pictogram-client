@@ -21,10 +21,14 @@ import { parseCookies } from "../lib/utilities.parse-cookies";
 import { isServer } from "../lib/utilities.is-server";
 import Router from "next/router";
 
+const isProduction = process.env.NODE_ENV === "production";
+
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
 const httpLink = new HttpLink({
-  uri: process.env.NEXT_PUBLIC_DEVELOPMENT_GQL_URI,
+  uri: isProduction
+    ? process.env.NEXT_PUBLIC_PRODUCTION_GQL_URI
+    : process.env.NEXT_PUBLIC_DEVELOPMENT_GQL_URI,
   credentials: "include"
 });
 
@@ -32,7 +36,9 @@ const httpLink = new HttpLink({
 const wsLink = !isServer()
   ? new WebSocketLink(
       new SubscriptionClient(
-        process.env.NEXT_PUBLIC_DEVELOPMENT_WEBSOCKET_URL!,
+        isProduction
+          ? process.env.NEXT_PUBLIC_PRODUCTION_WEBSOCKET_URL!
+          : process.env.NEXT_PUBLIC_DEVELOPMENT_WEBSOCKET_URL!,
         {
           lazy: true,
           reconnect: true
@@ -69,8 +75,6 @@ const authLink = setContext((_, { headers, req }) => {
 });
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
-  console.log("VIEW GQL ERRORS", graphQLErrors);
-
   // We don't want the home page to re-route so don't include
   // "createOrUpdateLikes" mutations to be filtered out and
   // redirected.
@@ -83,9 +87,8 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
     );
 
   if (filteredAuthErrors && filteredAuthErrors.length > 0) {
-    console.log("GOD KNOWS FILTERED AUTH ERRORS", filteredAuthErrors);
-
-    !isServer() && Router.replace("/login?flash=You must be authenticated");
+    !isServer() &&
+      Router.replace("/login?flash=You must be authenticated", "/login");
     return;
   }
 
