@@ -270,15 +270,6 @@ const Camera: React.FunctionComponent<CameraProps> = ({
                     {isCanvasEmpty ? "take a picture" : "clear"}
                   </Button>
                 )}
-
-                <Flex width={[1, 1, 1, `${videoWidth}px`]}>
-                  {cameraState.cameraStatus === "cameraIsOpen" ? (
-                    <CreatePostWithupload cardImage={cameraState.cardImage} />
-                  ) : (
-                    ""
-                  )}
-                </Flex>
-                <div style={{ height: "83px" }}></div>
               </Flex>
             </Flex>
           )}
